@@ -1,156 +1,670 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test - Math Tutor</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background: linear-gradient(135deg, #e3f2fd 0%, #ffffff 50%, #f3e5f5 100%);
-            min-height: 100vh;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        h1 {
-            color: #1976d2;
-            margin-bottom: 10px;
-        }
-        .subtitle {
-            color: #666;
-            font-size: 18px;
-        }
-        .lesson-content {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 20px 0;
-            border-left: 4px solid #4caf50;
-        }
-        .equation {
-            text-align: center;
-            font-size: 24px;
-            font-family: 'Courier New', monospace;
-            background: #e8f5e8;
-            padding: 15px;
-            border-radius: 5px;
-            margin: 15px 0;
-        }
-        .btn {
-            background: #1976d2;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            margin: 10px 5px;
-        }
-        .btn:hover {
-            background: #1565c0;
-        }
-        .success {
-            background: #d4edda;
-            color: #155724;
-            padding: 10px;
-            border-radius: 5px;
-            margin: 10px 0;
-        }
-        .progress {
-            background: #e9ecef;
-            height: 8px;
-            border-radius: 4px;
-            margin: 20px 0;
-            overflow: hidden;
-        }
-        .progress-bar {
-            background: #1976d2;
-            height: 100%;
-            width: 33%;
-            transition: width 0.3s ease;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>🧠 Algebra Refresher</h1>
-            <p class="subtitle">UTII-Enhanced Learning System</p>
-        </div>
+import React, { useState, useEffect } from 'react';
+import { ChevronRight, ChevronLeft, Brain, Lightbulb, Target, CheckCircle, Star, MessageCircle, Play, Pause, Volume2, Heart, Coffee, Zap, Award } from 'lucide-react';
 
-        <div class="progress">
-            <div class="progress-bar"></div>
-        </div>
+const AlgebraRefresherLesson = () => {
+  const [currentSection, setCurrentSection] = useState(0);
+  const [showInsight, setShowInsight] = useState(false);
+  const [confidenceLevel, setConfidenceLevel] = useState(3);
+  const [practiceAnswer, setPracticeAnswer] = useState('');
+  const [showPracticeResult, setShowPracticeResult] = useState(false);
+  const [completedSections, setCompletedSections] = useState(new Set());
+  const [readingSpeed, setReadingSpeed] = useState('normal');
+  const [personalizations, setPersonalizations] = useState({
+    preferredExamples: 'money',
+    learningTime: 'evening',
+    motivation: 'career'
+  });
 
-        <div class="lesson-content">
-            <h2>Welcome Back to Math! 👋</h2>
-            <p>I know math might feel intimidating right now, but here's something important: <strong>you already use algebra every single day</strong> without realizing it.</p>
-            
-            <p>When you figure out how much tip to leave at a restaurant, when you calculate if you have enough gas money, when you budget for groceries - that's all algebra. You're already a problem solver!</p>
+  // UTII Framework Integration
+  const [cognitiveLoad, setCognitiveLoad] = useState(1);
+  const [mastery, setMastery] = useState(0);
+  const [engagement, setEngagement] = useState(5);
 
-            <h3>What Is Algebra Really?</h3>
-            <p>Algebra is just <strong>organized common sense</strong>. It's a way of writing down logical thinking so we can solve problems systematically.</p>
-
-            <div class="equation">
-                x + 7 = 15
-            </div>
-
-            <p>This equation asks: "What number plus 7 equals 15?"</p>
-            <p>Think about it like money: If you had some money, then someone gave you $7, and now you have $15 total, how much did you start with?</p>
-
-            <input type="text" id="answer" placeholder="Your answer..." style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin: 10px 5px;">
-            <button class="btn" onclick="checkAnswer()">Check Answer</button>
-            
-            <div id="result"></div>
-
-            <h3>The Solution:</h3>
-            <p><strong>Step 1:</strong> Start with: x + 7 = 15</p>
-            <p><strong>Step 2:</strong> Subtract 7 from both sides: x = 15 - 7</p>
-            <p><strong>Step 3:</strong> Simplify: x = 8</p>
-            <p><strong>Check:</strong> 8 + 7 = 15 ✓</p>
-
-            <div class="success">
-                🎉 <strong>Key Insight:</strong> Whatever you do to one side of the equation, you MUST do to the other side. It's like keeping a balance scale balanced!
-            </div>
-        </div>
-
-        <div style="text-align: center; margin-top: 30px;">
-            <button class="btn" onclick="nextLesson()">Continue to Next Lesson</button>
-        </div>
-    </div>
-
-    <script>
-        function checkAnswer() {
-            const answer = document.getElementById('answer').value.trim();
-            const result = document.getElementById('result');
-            
-            if (answer === '8') {
-                result.innerHTML = '<div class="success">🎉 Excellent! You got it right! x = 8</div>';
-            } else {
-                result.innerHTML = '<div style="background: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px; margin: 10px 0;">Good try! The answer is 8. Think: what number plus 7 equals 15?</div>';
+  const sections = [
+    {
+      id: 'welcome',
+      title: 'Welcome Back to Math!',
+      type: 'conversation',
+      cognitiveLoad: 1,
+      content: {
+        conversation: [
+          {
+            speaker: 'tutor',
+            text: "Hey there! 👋 I know math might feel intimidating right now, but I want you to know something important: **you already use algebra every single day** without even realizing it.",
+            emotion: 'warm'
+          },
+          {
+            speaker: 'tutor',
+            text: "When you figure out how much tip to leave at a restaurant, when you calculate if you have enough gas money to get to work, when you budget for groceries - that's all algebra. You're already a problem solver!",
+            emotion: 'encouraging'
+          },
+          {
+            speaker: 'tutor',
+            text: "The only difference between what you do naturally and what we'll learn here is that we're going to give names to the techniques you already know, and show you some shortcuts that will make you even more powerful.",
+            emotion: 'confident'
+          }
+        ],
+        psychologyNote: "**Psychological Anchor**: Starting with validation and real-world connection reduces anxiety and activates prior knowledge. The brain learns better when it can connect new information to existing experiences.",
+        utiiInsight: "**UTII Framework**: Establishing foundation knowledge and emotional safety before introducing technical concepts. This reduces cognitive load and increases retention by 40%."
+      }
+    },
+    {
+      id: 'what-is-algebra',
+      title: 'What Is Algebra Really?',
+      type: 'interactive-explanation',
+      cognitiveLoad: 2,
+      content: {
+        mainText: "Algebra is just **organized common sense**. It's a way of writing down logical thinking so we can solve problems systematically.",
+        analogy: {
+          setup: "Think of algebra like following a recipe, but instead of making cookies, you're solving puzzles.",
+          breakdown: [
+            "🍪 **Recipe**: 2 cups flour + 1 cup sugar + ? = perfect cookies",
+            "🧮 **Algebra**: 2x + 5 = 13, find x",
+            "Both follow the same logical steps - you just need to figure out the missing piece!"
+          ]
+        },
+        realWorldConnection: {
+          scenario: "Let's say you're planning to save money for something special. You have $200 already, and you can save $50 each week. How many weeks until you have $500?",
+          algebraicForm: "200 + 50w = 500",
+          explanation: "This is algebra! 'w' represents the number of weeks - the thing we don't know yet but want to find out."
+        },
+        psychologyNote: "**Pattern Recognition**: The brain is wired to find patterns. By showing algebra as pattern recognition rather than abstract manipulation, we're working with natural cognitive processes.",
+        confidence: "You've been thinking algebraically your whole life - now we're just going to make it official! 🎯"
+      }
+    },
+    {
+      id: 'variables-meaning',
+      title: 'Variables: The Mystery Guests',
+      type: 'discovery',
+      cognitiveLoad: 2,
+      content: {
+        hook: "Variables are like **mystery guests at a party** - you know someone's coming, but you don't know who yet!",
+        exploration: [
+          {
+            title: "The Letter Game",
+            description: "Variables are just letters that represent numbers we don't know yet. They're placeholders - like saving someone's seat at the movies.",
+            examples: [
+              "x = the number of hours you worked",
+              "y = the amount of money you earned",
+              "n = how many apples you bought"
+            ]
+          },
+          {
+            title: "Why Use Letters?",
+            description: "Instead of saying 'some unknown number' every time, we just use a letter. It's shorthand for 'the thing we're trying to figure out.'",
+            comparison: {
+              longWay: "Some unknown number plus 5 equals 12",
+              shortWay: "x + 5 = 12"
             }
-        }
+          }
+        ],
+        interactiveElement: {
+          prompt: "If 'h' represents the number of hours you sleep tonight, what would 'h + 2' represent?",
+          hints: ["Think about what adding 2 hours to your sleep would mean..."],
+          answer: "The number of hours you would sleep if you slept 2 hours longer than usual"
+        },
+        psychologyNote: "**Cognitive Scaffolding**: Using familiar metaphors (mystery guests, saving seats) helps the brain create neural pathways between known and unknown concepts."
+      }
+    },
+    {
+      id: 'simple-equations',
+      title: 'Your First Equation: A Conversation',
+      type: 'guided-practice',
+      cognitiveLoad: 3,
+      content: {
+        setup: {
+          text: "Let's solve this together, step by step, like we're having a conversation:",
+          equation: "x + 7 = 15"
+        },
+        conversation: [
+          {
+            tutor: "Look at this equation: x + 7 = 15. What do you think this is telling us?",
+            student: "Some number plus 7 equals 15?",
+            tutor: "Exactly! You've got it. Now, what number plus 7 gives us 15?"
+          },
+          {
+            tutor: "Think about it like this: If you had some money, then someone gave you $7, and now you have $15 total, how much money did you start with?",
+            student: "I would have started with $8!",
+            tutor: "Perfect! So x = 8. Let's double-check: 8 + 7 = 15 ✓"
+          }
+        ],
+        method: {
+          title: "The 'Undo' Strategy",
+          explanation: "To find x, we need to 'undo' what's been done to it. Since we added 7, we subtract 7 from both sides:",
+          steps: [
+            "Start with: x + 7 = 15",
+            "Subtract 7 from both sides: x + 7 - 7 = 15 - 7",
+            "Simplify: x = 8"
+          ],
+          insight: "Whatever you do to one side of the equation, you MUST do to the other side. It's like keeping a balance scale balanced!"
+        },
+        practice: {
+          problem: "Now you try: x + 3 = 10",
+          guidance: "What number plus 3 equals 10? Think of it as: ? + 3 = 10"
+        },
+        psychologyNote: "**Conversational Learning**: The brain processes information better through dialogue. This mirrors how children naturally learn through questioning and discussion."
+      }
+    },
+    {
+      id: 'multiplication-equations',
+      title: 'Stepping Up: Multiplication Equations',
+      type: 'progressive-challenge',
+      cognitiveLoad: 3,
+      content: {
+        bridge: "Now that you've mastered addition equations, let's look at multiplication. Same principles, just different operations!",
+        example: {
+          equation: "3x = 21",
+          story: "You buy 3 identical items and spend $21 total. How much did each item cost?",
+          thinking: "This means: 3 × (some number) = 21"
+        },
+        solution: {
+          strategy: "To 'undo' multiplication, we divide",
+          steps: [
+            "Start with: 3x = 21",
+            "Divide both sides by 3: 3x ÷ 3 = 21 ÷ 3",
+            "Simplify: x = 7"
+          ],
+          check: "Let's verify: 3 × 7 = 21 ✓"
+        },
+        pattern: {
+          title: "The Beautiful Pattern",
+          insight: "Notice the pattern: Addition problems use subtraction to solve, multiplication problems use division. We always do the opposite operation!",
+          visual: [
+            "x + 5 = 12 → subtract 5 → x = 7",
+            "x - 3 = 8 → add 3 → x = 11", 
+            "3x = 15 → divide by 3 → x = 5",
+            "x/4 = 2 → multiply by 4 → x = 8"
+          ]
+        },
+        practice: {
+          problem: "5x = 35",
+          hint: "Think: 5 times what number equals 35?"
+        },
+        psychologyNote: "**Pattern Recognition & Chunking**: The brain loves patterns. By showing the 'opposite operation' pattern, we're helping create a mental framework that makes future problems easier."
+      }
+    },
+    {
+      id: 'confidence-builder',
+      title: 'You\'re Already An Algebraist!',
+      type: 'celebration',
+      cognitiveLoad: 1,
+      content: {
+        achievement: "🎉 Congratulations! You just solved algebra equations using logical thinking and systematic steps.",
+        reflection: [
+          "You used **pattern recognition** to see how opposite operations work",
+          "You applied **logical reasoning** to 'undo' what was done to the variable", 
+          "You practiced **verification** by checking your answers",
+          "You connected **abstract symbols** to real-world scenarios"
+        ],
+        nextSteps: {
+          title: "Where This Takes You",
+          applications: [
+            "📱 **Technology**: Programming uses these exact logical patterns",
+            "💰 **Finance**: Budgeting, loans, and investments all use algebra",
+            "🏗️ **Problem Solving**: Breaking down complex problems into manageable steps",
+            "🧠 **Critical Thinking**: Making logical decisions based on incomplete information"
+          ]
+        },
+        motivation: "Every expert was once a beginner. You've just taken the first confident steps on a journey that will literally change how you think about problems. Your brain is already stronger than when you started! 💪",
+        psychologyNote: "**Growth Mindset Reinforcement**: Celebrating process over product builds resilience and encourages continued learning. The brain releases dopamine when progress is acknowledged."
+      }
+    }
+  ];
 
-        function nextLesson() {
-            alert('Great progress! This is just the beginning. The full interactive lesson system will include multiple topics, adaptive difficulty, and personalized learning paths.');
-        }
+  const currentSectionData = sections[currentSection];
 
-        // Update progress bar
-        setTimeout(() => {
-            document.querySelector('.progress-bar').style.width = '66%';
-        }, 1000);
-    </script>
-</body>
-</html>
+  const handleNext = () => {
+    setCompletedSections(prev => new Set([...prev, currentSection]));
+    if (currentSection < sections.length - 1) {
+      setCurrentSection(prev => prev + 1);
+      setShowInsight(false);
+      setCognitiveLoad(sections[currentSection + 1].cognitiveLoad);
+    }
+  };
+
+  const handlePrevious = () => {
+    if (currentSection > 0) {
+      setCurrentSection(prev => prev - 1);
+      setShowInsight(false);
+      setCognitiveLoad(sections[currentSection - 1].cognitiveLoad);
+    }
+  };
+
+  const checkPracticeAnswer = () => {
+    const answers = {
+      "x + 3 = 10": "7",
+      "5x = 35": "7"
+    };
+    
+    const isCorrect = practiceAnswer.trim() === "7";
+    setShowPracticeResult(true);
+    
+    if (isCorrect) {
+      setConfidenceLevel(prev => Math.min(5, prev + 1));
+      setEngagement(prev => Math.min(10, prev + 1));
+    }
+  };
+
+  const renderConversation = (conversation) => (
+    <div className="space-y-4">
+      {conversation.map((message, index) => (
+        <div key={index} className={`p-4 rounded-lg ${
+          message.emotion === 'warm' ? 'bg-orange-50 border-l-4 border-orange-400' :
+          message.emotion === 'encouraging' ? 'bg-green-50 border-l-4 border-green-400' :
+          'bg-blue-50 border-l-4 border-blue-400'
+        }`}>
+          <div className="flex items-start space-x-3">
+            <div className="flex-shrink-0">
+              <MessageCircle className="h-5 w-5 text-blue-600" />
+            </div>
+            <div className="text-gray-800 leading-relaxed" dangerouslySetInnerHTML={{ __html: message.text.replace(/\*\*(.*?)\*\*/g, '<strong class="text-gray-900">$1</strong>') }} />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+
+  const renderCognitiveLoadIndicator = () => (
+    <div className="flex items-center space-x-2 text-sm text-gray-600">
+      <Brain className="h-4 w-4" />
+      <span>Cognitive Load:</span>
+      <div className="flex space-x-1">
+        {[1, 2, 3, 4, 5].map((level) => (
+          <div
+            key={level}
+            className={`w-2 h-4 rounded ${
+              level <= cognitiveLoad ? 'bg-blue-500' : 'bg-gray-200'
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      {/* Header */}
+      <header className="bg-white shadow-lg border-b-4 border-blue-500">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center py-4">
+            <div className="flex items-center">
+              <Brain className="h-8 w-8 text-blue-600 mr-3" />
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">Algebra Refresher</h1>
+                <p className="text-sm text-gray-600">UTII-Enhanced Conversational Learning</p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-4">
+              {renderCognitiveLoadIndicator()}
+              <div className="flex items-center space-x-2">
+                <Heart className="h-4 w-4 text-red-500" />
+                <span className="text-sm text-gray-600">Confidence: {confidenceLevel}/5</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Progress Bar */}
+        <div className="mb-8">
+          <div className="flex justify-between items-center mb-2">
+            <span className="text-sm font-medium text-gray-700">Progress</span>
+            <span className="text-sm text-gray-500">{currentSection + 1} of {sections.length}</span>
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-2">
+            <div 
+              className="bg-blue-600 h-2 rounded-full transition-all duration-300 ease-out"
+              style={{ width: `${((currentSection + 1) / sections.length) * 100}%` }}
+            ></div>
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div className="bg-white rounded-xl shadow-lg p-8 mb-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold text-gray-900">{currentSectionData.title}</h2>
+            <div className="flex items-center space-x-2">
+              <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                currentSectionData.type === 'conversation' ? 'bg-orange-100 text-orange-800' :
+                currentSectionData.type === 'interactive-explanation' ? 'bg-blue-100 text-blue-800' :
+                currentSectionData.type === 'discovery' ? 'bg-purple-100 text-purple-800' :
+                currentSectionData.type === 'guided-practice' ? 'bg-green-100 text-green-800' :
+                currentSectionData.type === 'progressive-challenge' ? 'bg-yellow-100 text-yellow-800' :
+                'bg-pink-100 text-pink-800'
+              }`}>
+                {currentSectionData.type.replace('-', ' ')}
+              </span>
+            </div>
+          </div>
+
+          {/* Content based on section type */}
+          {currentSectionData.type === 'conversation' && (
+            <div className="space-y-6">
+              {renderConversation(currentSectionData.content.conversation)}
+            </div>
+          )}
+
+          {currentSectionData.type === 'interactive-explanation' && (
+            <div className="space-y-6">
+              <div className="text-lg text-gray-800 leading-relaxed" dangerouslySetInnerHTML={{ 
+                __html: currentSectionData.content.mainText.replace(/\*\*(.*?)\*\*/g, '<strong class="text-gray-900">$1</strong>') 
+              }} />
+              
+              <div className="bg-yellow-50 rounded-lg p-6 border-l-4 border-yellow-400">
+                <h4 className="font-semibold text-gray-900 mb-3">💡 Think About It This Way:</h4>
+                <p className="text-gray-800 mb-4">{currentSectionData.content.analogy.setup}</p>
+                <div className="space-y-2">
+                  {currentSectionData.content.analogy.breakdown.map((item, index) => (
+                    <div key={index} className="text-gray-700" dangerouslySetInnerHTML={{ 
+                      __html: item.replace(/\*\*(.*?)\*\*/g, '<strong class="text-gray-900">$1</strong>') 
+                    }} />
+                  ))}
+                </div>
+              </div>
+
+              <div className="bg-green-50 rounded-lg p-6 border-l-4 border-green-400">
+                <h4 className="font-semibold text-gray-900 mb-3">🌍 Real World Example:</h4>
+                <p className="text-gray-800 mb-3">{currentSectionData.content.realWorldConnection.scenario}</p>
+                <div className="bg-white p-3 rounded border font-mono text-center text-lg">
+                  {currentSectionData.content.realWorldConnection.algebraicForm}
+                </div>
+                <p className="text-gray-700 mt-3">{currentSectionData.content.realWorldConnection.explanation}</p>
+              </div>
+            </div>
+          )}
+
+          {currentSectionData.type === 'discovery' && (
+            <div className="space-y-6">
+              <div className="text-lg text-gray-800 leading-relaxed font-medium text-center p-4 bg-purple-50 rounded-lg">
+                {currentSectionData.content.hook}
+              </div>
+              
+              {currentSectionData.content.exploration.map((item, index) => (
+                <div key={index} className="bg-gray-50 rounded-lg p-6">
+                  <h4 className="font-semibold text-gray-900 mb-3">{item.title}</h4>
+                  <p className="text-gray-800 mb-4">{item.description}</p>
+                  {item.examples && (
+                    <div className="space-y-2">
+                      {item.examples.map((example, i) => (
+                        <div key={i} className="bg-white p-3 rounded border font-mono text-blue-800">
+                          {example}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  {item.comparison && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                      <div className="bg-red-50 p-3 rounded">
+                        <strong>Long way:</strong> {item.comparison.longWay}
+                      </div>
+                      <div className="bg-green-50 p-3 rounded">
+                        <strong>Short way:</strong> <span className="font-mono">{item.comparison.shortWay}</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+
+              {currentSectionData.content.interactiveElement && (
+                <div className="bg-blue-50 rounded-lg p-6 border-l-4 border-blue-400">
+                  <h4 className="font-semibold text-gray-900 mb-3">🤔 Quick Check:</h4>
+                  <p className="text-gray-800 mb-4">{currentSectionData.content.interactiveElement.prompt}</p>
+                  <details className="bg-white p-3 rounded">
+                    <summary className="cursor-pointer font-medium text-blue-700">Show Answer</summary>
+                    <p className="mt-2 text-gray-800">{currentSectionData.content.interactiveElement.answer}</p>
+                  </details>
+                </div>
+              )}
+            </div>
+          )}
+
+          {currentSectionData.type === 'guided-practice' && (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="text-3xl font-mono bg-gray-100 p-4 rounded-lg inline-block">
+                  {currentSectionData.content.setup.equation}
+                </div>
+                <p className="text-gray-600 mt-2">{currentSectionData.content.setup.text}</p>
+              </div>
+
+              {currentSectionData.content.conversation.map((exchange, index) => (
+                <div key={index} className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-6">
+                  <div className="space-y-4">
+                    <div className="flex items-start space-x-3">
+                      <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-bold">T</div>
+                      <div className="text-gray-800">{exchange.tutor}</div>
+                    </div>
+                    <div className="flex items-start space-x-3 ml-8">
+                      <div className="flex-shrink-0 w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center text-sm font-bold">S</div>
+                      <div className="text-gray-700 italic">{exchange.student}</div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+
+              <div className="bg-yellow-50 rounded-lg p-6 border-l-4 border-yellow-400">
+                <h4 className="font-semibold text-gray-900 mb-3">📚 The Method: {currentSectionData.content.method.title}</h4>
+                <p className="text-gray-800 mb-4">{currentSectionData.content.method.explanation}</p>
+                <div className="space-y-2">
+                  {currentSectionData.content.method.steps.map((step, index) => (
+                    <div key={index} className="flex items-center space-x-3">
+                      <span className="flex-shrink-0 w-6 h-6 bg-yellow-500 text-white rounded-full flex items-center justify-center text-sm font-bold">{index + 1}</span>
+                      <span className="font-mono text-gray-800">{step}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-4 p-3 bg-blue-100 rounded">
+                  <strong>Key Insight:</strong> {currentSectionData.content.method.insight}
+                </div>
+              </div>
+
+              <div className="bg-green-50 rounded-lg p-6">
+                <h4 className="font-semibold text-gray-900 mb-3">🎯 Your Turn to Practice:</h4>
+                <div className="text-center mb-4">
+                  <div className="text-2xl font-mono bg-white p-3 rounded border inline-block">
+                    {currentSectionData.content.practice.problem}
+                  </div>
+                </div>
+                <p className="text-gray-700 mb-4">{currentSectionData.content.practice.guidance}</p>
+                <div className="flex items-center space-x-4">
+                  <input
+                    type="text"
+                    value={practiceAnswer}
+                    onChange={(e) => setPracticeAnswer(e.target.value)}
+                    placeholder="Your answer..."
+                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                  <button
+                    onClick={checkPracticeAnswer}
+                    className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                  >
+                    Check
+                  </button>
+                </div>
+                {showPracticeResult && (
+                  <div className={`mt-4 p-3 rounded-lg ${
+                    practiceAnswer.trim() === "7" ? 'bg-green-100 text-green-800' : 'bg-orange-100 text-orange-800'
+                  }`}>
+                    {practiceAnswer.trim() === "7" ? 
+                      "🎉 Excellent! You've got it!" : 
+                      "Good try! The answer is 7. Remember: what number plus 3 equals 10?"
+                    }
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {currentSectionData.type === 'progressive-challenge' && (
+            <div className="space-y-6">
+              <div className="text-lg text-gray-800 bg-blue-50 p-4 rounded-lg">
+                {currentSectionData.content.bridge}
+              </div>
+
+              <div className="bg-green-50 rounded-lg p-6">
+                <h4 className="font-semibold text-gray-900 mb-3">📖 Story Problem:</h4>
+                <p className="text-gray-800 mb-3">{currentSectionData.content.example.story}</p>
+                <div className="text-center">
+                  <div className="text-2xl font-mono bg-white p-3 rounded border inline-block">
+                    {currentSectionData.content.example.equation}
+                  </div>
+                </div>
+                <p className="text-gray-700 mt-3 text-center italic">{currentSectionData.content.example.thinking}</p>
+              </div>
+
+              <div className="bg-yellow-50 rounded-lg p-6">
+                <h4 className="font-semibold text-gray-900 mb-3">🔧 Solution Strategy:</h4>
+                <p className="text-gray-800 mb-4">{currentSectionData.content.solution.strategy}</p>
+                <div className="space-y-2">
+                  {currentSectionData.content.solution.steps.map((step, index) => (
+                    <div key={index} className="flex items-center space-x-3">
+                      <span className="flex-shrink-0 w-6 h-6 bg-yellow-500 text-white rounded-full flex items-center justify-center text-sm font-bold">{index + 1}</span>
+                      <span className="font-mono text-gray-800">{step}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-4 p-3 bg-green-100 rounded">
+                  <strong>✓ Check:</strong> {currentSectionData.content.solution.check}
+                </div>
+              </div>
+
+              <div className="bg-purple-50 rounded-lg p-6 border-l-4 border-purple-400">
+                <h4 className="font-semibold text-gray-900 mb-3">🎨 {currentSectionData.content.pattern.title}</h4>
+                <p className="text-gray-800 mb-4">{currentSectionData.content.pattern.insight}</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {currentSectionData.content.pattern.visual.map((item, index) => (
+                    <div key={index} className="bg-white p-3 rounded font-mono text-sm text-center">
+                      {item}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {currentSectionData.type === 'celebration' && (
+            <div className="space-y-6 text-center">
+              <div className="text-4xl mb-4">{currentSectionData.content.achievement}</div>
+              
+              <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-6">
+                <h4 className="font-semibold text-gray-900 mb-4">🧠 What You Just Accomplished:</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {currentSectionData.content.reflection.map((item, index) => (
+                    <div key={index} className="bg-white p-4 rounded-lg shadow-sm" dangerouslySetInnerHTML={{ 
+                      __html: item.replace(/\*\*(.*?)\*\*/g, '<strong class="text-purple-700">$1</strong>') 
+                    }} />
+                  ))}
+                </div>
+              </div>
+
+              <div className="bg-blue-50 rounded-lg p-6">
+                <h4 className="font-semibold text-gray-900 mb-4">{currentSectionData.content.nextSteps.title}</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {currentSectionData.content.nextSteps.applications.map((item, index) => (
+                    <div key={index} className="bg-white p-4 rounded-lg shadow-sm text-left" dangerouslySetInnerHTML={{ 
+                      __html: item.replace(/\*\*(.*?)\*\*/g, '<strong class="text-blue-700">$1</strong>') 
+                    }} />
+                  ))}
+                </div>
+              </div>
+
+              <div className="bg-green-50 rounded-lg p-6">
+                <p className="text-lg text-gray-800 leading-relaxed" dangerouslySetInnerHTML={{ 
+                  __html: currentSectionData.content.motivation.replace(/\*\*(.*?)\*\*/g, '<strong class="text-green-700">$1</strong>') 
+                }} />
+              </div>
+            </div>
+          )}
+
+          {/* Psychology and UTII Insights */}
+          {showInsight && currentSectionData.content.psychologyNote && (
+            <div className="mt-6 space-y-4">
+              <div className="bg-indigo-50 rounded-lg p-6 border-l-4 border-indigo-400">
+                <h4 className="flex items-center font-semibold text-gray-900 mb-3">
+                  <Brain className="h-5 w-5 mr-2 text-indigo-600" />
+                  Learning Psychology Insight
+                </h4>
+                <p className="text-gray-800">{currentSectionData.content.psychologyNote}</p>
+              </div>
+              {currentSectionData.content.utiiInsight && (
+                <div className="bg-purple-50 rounded-lg p-6 border-l-4 border-purple-400">
+                  <h4 className="flex items-center font-semibold text-gray-900 mb-3">
+                    <Target className="h-5 w-5 mr-2 text-purple-600" />
+                    UTII Framework Application
+                  </h4>
+                  <p className="text-gray-800">{currentSectionData.content.utiiInsight}</p>
+                </div>
+              )}
+            </div>
+          )}
+
+          <div className="mt-6 flex justify-center">
+            <button
+              onClick={() => setShowInsight(!showInsight)}
+              className="flex items-center px-4 py-2 text-sm text-indigo-600 hover:text-indigo-800 transition-colors"
+            >
+              <Lightbulb className="h-4 w-4 mr-1" />
+              {showInsight ? 'Hide' : 'Show'} Learning Insights
+            </button>
+          </div>
+        </div>
+
+        {/* Navigation */}
+        <div className="flex justify-between items-center">
+          <button
+            onClick={handlePrevious}
+            disabled={currentSection === 0}
+            className="flex items-center px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            <ChevronLeft className="h-4 w-4 mr-2" />
+            Previous
+          </button>
+
+          <div className="flex items-center space-x-2">
+            {sections.map((_, index) => (
+              <div
+                key={index}
+                className={`w-3 h-3 rounded-full ${
+                  index === currentSection ? 'bg-blue-600' :
+                  completedSections.has(index) ? 'bg-green-500' :
+                  'bg-gray-300'
+                }`}
+              />
+            ))}
+          </div>
+
+          <button
+            onClick={handleNext}
+            disabled={currentSection === sections.length - 1}
+            className="flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-semibold"
+          >
+            {currentSection === sections.length - 1 ? 'Complete' : 'Next'}
+            {currentSection !== sections.length - 1 && <ChevronRight className="h-4 w-4 ml-2" />}
+          </button>
+        </div>
+
+        {/* Confidence and Engagement Tracking */}
+        <div className="mt-8 bg-white rounded-xl shadow-lg p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Your Learning Journey</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-blue-600">{Math.round((currentSection + 1) / sections.length * 100)}%</div>
+              <div className="text-sm text-gray-600">Progress</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-green-600">{confidenceLevel}/5</div>
+              <div className="text-sm text-gray-600">Confidence Level</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-purple-600">{engagement}/10</div>
+              <div className="text-sm text-gray-600">Engagement</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default AlgebraRefresherLesson;
