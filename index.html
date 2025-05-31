@@ -3,685 +3,1051 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Algebra Refresher - Interactive Lesson</title>
-    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Advanced Algebra Mastery - UTII Framework</title>
     <style>
-        body { margin: 0; font-family: system-ui, -apple-system, sans-serif; }
-        .gradient-bg { background: linear-gradient(135deg, #dbeafe 0%, #ffffff 50%, #faf5ff 100%); }
-        .space-y-4 > * + * { margin-top: 1rem; }
-        .space-y-6 > * + * { margin-top: 1.5rem; }
-        .space-x-2 > * + * { margin-left: 0.5rem; }
-        .space-x-3 > * + * { margin-left: 0.75rem; }
-        .space-x-4 > * + * { margin-left: 1rem; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .lesson-container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .lesson-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .sidebar {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 25px;
+            border-radius: 15px;
+            height: fit-content;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .analytics-panel {
+            margin-bottom: 30px;
+        }
+
+        .analytics-panel h3 {
+            color: #4a5568;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .metric:last-child {
+            border-bottom: none;
+        }
+
+        .metric-value {
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .confidence { color: #38a169; }
+        .cognitive-load { color: #3182ce; }
+        .engagement { color: #805ad5; }
+
+        .progress-ring {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 20px;
+        }
+
+        .progress-ring circle {
+            fill: none;
+            stroke-width: 4;
+            stroke-linecap: round;
+            transform-origin: 50% 50%;
+            transform: rotate(-90deg);
+            transition: stroke-dashoffset 0.5s ease;
+        }
+
+        .progress-bg {
+            stroke: #e2e8f0;
+        }
+
+        .progress-fill {
+            stroke: #667eea;
+            stroke-dasharray: 157;
+        }
+
+        .lesson-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+
+        .section-type {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 500;
+            text-transform: capitalize;
+        }
+
+        .type-conversation { background: #fed7d7; color: #c53030; }
+        .type-explanation { background: #bee3f8; color: #2b6cb0; }
+        .type-discovery { background: #e9d8fd; color: #6b46c1; }
+        .type-practice { background: #c6f6d5; color: #2f855a; }
+        .type-challenge { background: #fefcbf; color: #d69e2e; }
+        .type-celebration { background: #fed7e2; color: #b83280; }
+
+        .conversation-bubble {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+            position: relative;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .conversation-bubble::before {
+            content: '🤖';
+            position: absolute;
+            left: -10px;
+            top: -5px;
+            font-size: 1.5em;
+            background: white;
+            border-radius: 50%;
+            padding: 5px;
+        }
+
+        .analogy-box {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 5px solid #ff8a65;
+        }
+
+        .real-world-box {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 5px solid #4ecdc4;
+        }
+
+        .equation-display {
+            background: #1a202c;
+            color: #e2e8f0;
+            font-family: 'Courier New', monospace;
+            font-size: 1.5em;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px 0;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .practice-area {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .answer-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+        }
+
+        .check-btn {
+            background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .check-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(56, 161, 105, 0.4);
+        }
+
+        .feedback {
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .feedback.correct {
+            background: linear-gradient(135deg, #c6f6d5 0%, #9ae6b4 100%);
+            color: #22543d;
+            border-left: 5px solid #38a169;
+        }
+
+        .feedback.incorrect {
+            background: linear-gradient(135deg, #fed7d7 0%, #feb2b2 100%);
+            color: #742a2a;
+            border-left: 5px solid #e53e3e;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .section-dots {
+            display: flex;
+            gap: 10px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .dot.active {
+            background: #667eea;
+            transform: scale(1.2);
+        }
+
+        .dot.completed {
+            background: #38a169;
+        }
+
+        .insights-panel {
+            background: linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 100%);
+            border: 2px solid #c7d2fe;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .insights-panel.show {
+            display: block;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        .insights-toggle {
+            background: none;
+            border: 2px solid #667eea;
+            color: #667eea;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .insights-toggle:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .step-by-step {
+            background: #f7fafc;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .step-number {
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+
+        .celebration {
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .celebration .emoji {
+            font-size: 4em;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+
+        .achievements {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .achievement {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        .typing-effect {
+            overflow: hidden;
+            border-right: 3px solid #667eea;
+            white-space: nowrap;
+            margin: 0 auto;
+            animation: typing 3s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: #667eea; }
+        }
+
+        .pattern-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .pattern-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .pattern-item:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body>
-    <div id="root"></div>
-    
-    <script type="text/babel">
-        const { useState, useEffect } = React;
+    <div class="container">
+        <header class="header">
+            <h1>🧠 Advanced Algebra Mastery</h1>
+            <p class="subtitle">UTII-Enhanced Conversational Learning System</p>
+        </header>
 
-        // Simple icon components to replace lucide
-        const ChevronRight = ({ className }) => React.createElement('svg', { className, fill: 'currentColor', viewBox: '0 0 20 20' }, React.createElement('path', { fillRule: 'evenodd', d: 'M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z', clipRule: 'evenodd' }));
-        const ChevronLeft = ({ className }) => React.createElement('svg', { className, fill: 'currentColor', viewBox: '0 0 20 20' }, React.createElement('path', { fillRule: 'evenodd', d: 'M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z', clipRule: 'evenodd' }));
-        const Brain = ({ className }) => React.createElement('svg', { className, fill: 'currentColor', viewBox: '0 0 20 20' }, React.createElement('path', { d: 'M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z' }));
-        const Heart = ({ className }) => React.createElement('svg', { className, fill: 'currentColor', viewBox: '0 0 20 20' }, React.createElement('path', { fillRule: 'evenodd', d: 'M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z', clipRule: 'evenodd' }));
-        const MessageCircle = ({ className }) => React.createElement('svg', { className, fill: 'currentColor', viewBox: '0 0 20 20' }, React.createElement('path', { d: 'M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z' }));
-        const Lightbulb = ({ className }) => React.createElement('svg', { className, fill: 'currentColor', viewBox: '0 0 20 20' }, React.createElement('path', { d: 'M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 6.343a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464a1 1 0 10-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM6 10a1 1 0 01-1 1H4a1 1 0 110-2h1a1 1 0 011 1zM9 14a1 1 0 102 0v1a1 1 0 11-2 0v-1zM5 18h10v1a1 1 0 01-1 1H6a1 1 0 01-1-1v-1z' }));
-        const Target = ({ className }) => React.createElement('svg', { className, fill: 'currentColor', viewBox: '0 0 20 20' }, React.createElement('path', { fillRule: 'evenodd', d: 'M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z', clipRule: 'evenodd' }));
+        <div class="lesson-container">
+            <aside class="sidebar">
+                <div class="analytics-panel">
+                    <h3>Learning Analytics</h3>
+                    
+                    <svg class="progress-ring" viewBox="0 0 60 60">
+                        <circle class="progress-bg" cx="30" cy="30" r="25"/>
+                        <circle class="progress-fill" cx="30" cy="30" r="25" id="progress-circle"/>
+                    </svg>
+                    
+                    <div class="metric">
+                        <span>Confidence</span>
+                        <span class="metric-value confidence" id="confidence-display">3/5</span>
+                    </div>
+                    <div class="metric">
+                        <span>Cognitive Load</span>
+                        <span class="metric-value cognitive-load" id="cognitive-display">●●○○○</span>
+                    </div>
+                    <div class="metric">
+                        <span>Engagement</span>
+                        <span class="metric-value engagement" id="engagement-display">85%</span>
+                    </div>
+                    <div class="metric">
+                        <span>Time Spent</span>
+                        <span class="metric-value" id="time-display">0:00</span>
+                    </div>
+                </div>
 
-        const AlgebraRefresherLesson = () => {
-            const [currentSection, setCurrentSection] = useState(0);
-            const [showInsight, setShowInsight] = useState(false);
-            const [confidenceLevel, setConfidenceLevel] = useState(3);
-            const [practiceAnswer, setPracticeAnswer] = useState('');
-            const [showPracticeResult, setShowPracticeResult] = useState(false);
-            const [completedSections, setCompletedSections] = useState(new Set());
+                <div class="analytics-panel">
+                    <h3>Progress</h3>
+                    <div class="metric">
+                        <span>Current Section</span>
+                        <span class="metric-value" id="section-counter">1/6</span>
+                    </div>
+                    <div class="metric">
+                        <span>Problems Solved</span>
+                        <span class="metric-value" id="problems-solved">0</span>
+                    </div>
+                    <div class="metric">
+                        <span>Accuracy Rate</span>
+                        <span class="metric-value" id="accuracy-rate">--</span>
+                    </div>
+                </div>
+            </aside>
+
+            <main class="lesson-content">
+                <div class="section-header">
+                    <div>
+                        <h2 class="section-title" id="section-title">Welcome Back to Math!</h2>
+                        <span class="section-type type-conversation" id="section-type">conversation</span>
+                    </div>
+                </div>
+
+                <div id="lesson-content">
+                    <!-- Dynamic content will be inserted here -->
+                </div>
+
+                <button class="insights-toggle" onclick="toggleInsights()">
+                    💡 Show Learning Insights
+                </button>
+
+                <div class="insights-panel" id="insights-panel">
+                    <h4>🧠 Learning Psychology Insight</h4>
+                    <p id="psychology-note"></p>
+                    <h4>🎯 UTII Framework Application</h4>
+                    <p id="utii-insight"></p>
+                </div>
+            </main>
+        </div>
+
+        <nav class="navigation">
+            <button class="nav-btn" id="prev-btn" onclick="previousSection()" disabled>
+                ← Previous
+            </button>
+
+            <div class="section-dots" id="section-dots">
+                <!-- Dots will be generated dynamically -->
+            </div>
+
+            <button class="nav-btn" id="next-btn" onclick="nextSection()">
+                Next →
+            </button>
+        </nav>
+    </div>
+
+    <script>
+        // Learning Analytics State
+        let currentSection = 0;
+        let confidence = 3;
+        let cognitiveLoad = 1;
+        let engagement = 85;
+        let startTime = Date.now();
+        let problemsSolved = 0;
+        let correctAnswers = 0;
+        let completedSections = new Set();
+        let showInsights = false;
+
+        // Lesson Content Data
+        const sections = [
+            {
+                id: 'welcome',
+                title: 'Welcome Back to Math!',
+                type: 'conversation',
+                cognitiveLoad: 1,
+                content: {
+                    conversations: [
+                        "Hey there! 👋 I know math might feel intimidating right now, but I want you to know something important: **you already use algebra every single day** without even realizing it.",
+                        "When you figure out how much tip to leave at a restaurant, when you calculate if you have enough gas money to get to work, when you budget for groceries - that's all algebra. You're already a problem solver!",
+                        "The only difference between what you do naturally and what we'll learn here is that we're going to give names to the techniques you already know, and show you some shortcuts that will make you even more powerful."
+                    ],
+                    psychologyNote: "Starting with validation and real-world connection reduces anxiety and activates prior knowledge. The brain learns better when it can connect new information to existing experiences.",
+                    utiiInsight: "Establishing foundation knowledge and emotional safety before introducing technical concepts. This reduces cognitive load and increases retention by 40%."
+                }
+            },
+            {
+                id: 'what-is-algebra',
+                title: 'What Is Algebra Really?',
+                type: 'explanation',
+                cognitiveLoad: 2,
+                content: {
+                    mainText: "Algebra is just **organized common sense**. It's a way of writing down logical thinking so we can solve problems systematically.",
+                    analogy: {
+                        setup: "Think of algebra like following a recipe, but instead of making cookies, you're solving puzzles.",
+                        examples: [
+                            "🍪 **Recipe**: 2 cups flour + 1 cup sugar + ? = perfect cookies",
+                            "🧮 **Algebra**: 2x + 5 = 13, find x",
+                            "Both follow the same logical steps - you just need to figure out the missing piece!"
+                        ]
+                    },
+                    realWorld: {
+                        scenario: "Let's say you're planning to save money for something special. You have $200 already, and you can save $50 each week. How many weeks until you have $500?",
+                        equation: "200 + 50w = 500",
+                        explanation: "This is algebra! 'w' represents the number of weeks - the thing we don't know yet but want to find out."
+                    },
+                    psychologyNote: "The brain is wired to find patterns. By showing algebra as pattern recognition rather than abstract manipulation, we're working with natural cognitive processes.",
+                    utiiInsight: "Using analogies and real-world connections creates multiple neural pathways for understanding, improving retention and reducing cognitive load."
+                }
+            },
+            {
+                id: 'variables',
+                title: 'Variables: The Mystery Guests',
+                type: 'discovery',
+                cognitiveLoad: 2,
+                content: {
+                    hook: "Variables are like **mystery guests at a party** - you know someone's coming, but you don't know who yet!",
+                    examples: [
+                        "x = the number of hours you worked",
+                        "y = the amount of money you earned", 
+                        "n = how many apples you bought"
+                    ],
+                    interactive: {
+                        question: "If 'h' represents the number of hours you sleep tonight, what would 'h + 2' represent?",
+                        answer: "The number of hours you would sleep if you slept 2 hours longer than usual"
+                    },
+                    psychologyNote: "Using familiar metaphors (mystery guests, saving seats) helps the brain create neural pathways between known and unknown concepts.",
+                    utiiInsight: "Cognitive scaffolding through metaphors reduces the mental effort required to understand abstract concepts."
+                }
+            },
+            {
+                id: 'simple-equations',
+                title: 'Your First Equation: A Conversation',
+                type: 'practice',
+                cognitiveLoad: 3,
+                content: {
+                    equation: "x + 7 = 15",
+                    story: "If you had some money, then someone gave you $7, and now you have $15 total, how much money did you start with?",
+                    steps: [
+                        "Start with: x + 7 = 15",
+                        "Subtract 7 from both sides: x + 7 - 7 = 15 - 7", 
+                        "Simplify: x = 8"
+                    ],
+                    practice: {
+                        problem: "x + 3 = 10",
+                        answer: "7",
+                        hint: "What number plus 3 equals 10?"
+                    },
+                    psychologyNote: "The brain processes information better through dialogue. This mirrors how children naturally learn through questioning and discussion.",
+                    utiiInsight: "Conversational learning reduces cognitive load by breaking complex processes into digestible exchanges."
+                }
+            },
+            {
+                id: 'multiplication',
+                title: 'Stepping Up: Multiplication Equations',
+                type: 'challenge',
+                cognitiveLoad: 3,
+                content: {
+                    bridge: "Now that you've mastered addition equations, let's look at multiplication. Same principles, just different operations!",
+                    equation: "3x = 21",
+                    story: "You buy 3 identical items and spend $21 total. How much did each item cost?",
+                    pattern: [
+                        "x + 5 = 12 → subtract 5 → x = 7",
+                        "x - 3 = 8 → add 3 → x = 11",
+                        "3x = 15 → divide by 3 → x = 5", 
+                        "x/4 = 2 → multiply by 4 → x = 8"
+                    ],
+                    practice: {
+                        problem: "5x = 35",
+                        answer: "7",
+                        hint: "5 times what number equals 35?"
+                    },
+                    psychologyNote: "The brain loves patterns. By showing the 'opposite operation' pattern, we're helping create a mental framework that makes future problems easier.",
+                    utiiInsight: "Pattern recognition and chunking reduce cognitive load by organizing information into memorable frameworks."
+                }
+            },
+            {
+                id: 'celebration',
+                title: 'You\'re Already An Algebraist!',
+                type: 'celebration',
+                cognitiveLoad: 1,
+                content: {
+                    achievement: "🎉 Congratulations! You just solved algebra equations using logical thinking and systematic steps.",
+                    accomplishments: [
+                        "Used **pattern recognition** to see how opposite operations work",
+                        "Applied **logical reasoning** to 'undo' what was done to the variable",
+                        "Practiced **verification** by checking your answers",
+                        "Connected **abstract symbols** to real-world scenarios"
+                    ],
+                    applications: [
+                        "📱 **Technology**: Programming uses these exact logical patterns",
+                        "💰 **Finance**: Budgeting, loans, and investments all use algebra", 
+                        "🏗️ **Problem Solving**: Breaking down complex problems into manageable steps",
+                        "🧠 **Critical Thinking**: Making logical decisions based on incomplete information"
+                    ],
+                    motivation: "Every expert was once a beginner. You've just taken the first confident steps on a journey that will literally change how you think about problems. Your brain is already stronger than when you started! 💪",
+                    psychologyNote: "Celebrating process over product builds resilience and encourages continued learning. The brain releases dopamine when progress is acknowledged.",
+                    utiiInsight: "Recognition and celebration reinforce learning pathways and increase motivation for continued engagement."
+                }
+            }
+        ];
+
+        // Initialize the lesson
+        function init() {
+            generateSectionDots();
+            renderSection();
+            startTimer();
+        }
+
+        function generateSectionDots() {
+            const dotsContainer = document.getElementById('section-dots');
+            dotsContainer.innerHTML = '';
             
-            // UTII Framework Integration
-            const [cognitiveLoad, setCognitiveLoad] = useState(1);
-            const [engagement, setEngagement] = useState(5);
+            sections.forEach((_, index) => {
+                const dot = document.createElement('div');
+                dot.className = 'dot';
+                if (index === currentSection) dot.classList.add('active');
+                if (completedSections.has(index)) dot.classList.add('completed');
+                dot.onclick = () => goToSection(index);
+                dotsContainer.appendChild(dot);
+            });
+        }
 
-            const sections = [
-                {
-                    id: 'welcome',
-                    title: 'Welcome Back to Math!',
-                    type: 'conversation',
-                    cognitiveLoad: 1,
-                    content: {
-                        conversation: [
-                            {
-                                speaker: 'tutor',
-                                text: "Hey there! 👋 I know math might feel intimidating right now, but I want you to know something important: <strong>you already use algebra every single day</strong> without even realizing it.",
-                                emotion: 'warm'
-                            },
-                            {
-                                speaker: 'tutor',
-                                text: "When you figure out how much tip to leave at a restaurant, when you calculate if you have enough gas money to get to work, when you budget for groceries - that's all algebra. You're already a problem solver!",
-                                emotion: 'encouraging'
-                            },
-                            {
-                                speaker: 'tutor',
-                                text: "The only difference between what you do naturally and what we'll learn here is that we're going to give names to the techniques you already know, and show you some shortcuts that will make you even more powerful.",
-                                emotion: 'confident'
-                            }
-                        ],
-                        psychologyNote: "**Psychological Anchor**: Starting with validation and real-world connection reduces anxiety and activates prior knowledge. The brain learns better when it can connect new information to existing experiences.",
-                        utiiInsight: "**UTII Framework**: Establishing foundation knowledge and emotional safety before introducing technical concepts. This reduces cognitive load and increases retention by 40%."
-                    }
-                },
-                {
-                    id: 'what-is-algebra',
-                    title: 'What Is Algebra Really?',
-                    type: 'interactive-explanation',
-                    cognitiveLoad: 2,
-                    content: {
-                        mainText: "Algebra is just <strong>organized common sense</strong>. It's a way of writing down logical thinking so we can solve problems systematically.",
-                        analogy: {
-                            setup: "Think of algebra like following a recipe, but instead of making cookies, you're solving puzzles.",
-                            breakdown: [
-                                "🍪 <strong>Recipe</strong>: 2 cups flour + 1 cup sugar + ? = perfect cookies",
-                                "🧮 <strong>Algebra</strong>: 2x + 5 = 13, find x",
-                                "Both follow the same logical steps - you just need to figure out the missing piece!"
-                            ]
-                        },
-                        realWorldConnection: {
-                            scenario: "Let's say you're planning to save money for something special. You have $200 already, and you can save $50 each week. How many weeks until you have $500?",
-                            algebraicForm: "200 + 50w = 500",
-                            explanation: "This is algebra! 'w' represents the number of weeks - the thing we don't know yet but want to find out."
-                        },
-                        psychologyNote: "**Pattern Recognition**: The brain is wired to find patterns. By showing algebra as pattern recognition rather than abstract manipulation, we're working with natural cognitive processes.",
-                        confidence: "You've been thinking algebraically your whole life - now we're just going to make it official! 🎯"
-                    }
-                },
-                {
-                    id: 'variables-meaning',
-                    title: 'Variables: The Mystery Guests',
-                    type: 'discovery',
-                    cognitiveLoad: 2,
-                    content: {
-                        hook: "Variables are like <strong>mystery guests at a party</strong> - you know someone's coming, but you don't know who yet!",
-                        exploration: [
-                            {
-                                title: "The Letter Game",
-                                description: "Variables are just letters that represent numbers we don't know yet. They're placeholders - like saving someone's seat at the movies.",
-                                examples: [
-                                    "x = the number of hours you worked",
-                                    "y = the amount of money you earned",
-                                    "n = how many apples you bought"
-                                ]
-                            },
-                            {
-                                title: "Why Use Letters?",
-                                description: "Instead of saying 'some unknown number' every time, we just use a letter. It's shorthand for 'the thing we're trying to figure out.'",
-                                comparison: {
-                                    longWay: "Some unknown number plus 5 equals 12",
-                                    shortWay: "x + 5 = 12"
-                                }
-                            }
-                        ],
-                        interactiveElement: {
-                            prompt: "If 'h' represents the number of hours you sleep tonight, what would 'h + 2' represent?",
-                            hints: ["Think about what adding 2 hours to your sleep would mean..."],
-                            answer: "The number of hours you would sleep if you slept 2 hours longer than usual"
-                        },
-                        psychologyNote: "**Cognitive Scaffolding**: Using familiar metaphors (mystery guests, saving seats) helps the brain create neural pathways between known and unknown concepts."
-                    }
-                },
-                {
-                    id: 'simple-equations',
-                    title: 'Your First Equation: A Conversation',
-                    type: 'guided-practice',
-                    cognitiveLoad: 3,
-                    content: {
-                        setup: {
-                            text: "Let's solve this together, step by step, like we're having a conversation:",
-                            equation: "x + 7 = 15"
-                        },
-                        conversation: [
-                            {
-                                tutor: "Look at this equation: x + 7 = 15. What do you think this is telling us?",
-                                student: "Some number plus 7 equals 15?",
-                                tutor: "Exactly! You've got it. Now, what number plus 7 gives us 15?"
-                            },
-                            {
-                                tutor: "Think about it like this: If you had some money, then someone gave you $7, and now you have $15 total, how much money did you start with?",
-                                student: "I would have started with $8!",
-                                tutor: "Perfect! So x = 8. Let's double-check: 8 + 7 = 15 ✓"
-                            }
-                        ],
-                        method: {
-                            title: "The 'Undo' Strategy",
-                            explanation: "To find x, we need to 'undo' what's been done to it. Since we added 7, we subtract 7 from both sides:",
-                            steps: [
-                                "Start with: x + 7 = 15",
-                                "Subtract 7 from both sides: x + 7 - 7 = 15 - 7",
-                                "Simplify: x = 8"
-                            ],
-                            insight: "Whatever you do to one side of the equation, you MUST do to the other side. It's like keeping a balance scale balanced!"
-                        },
-                        practice: {
-                            problem: "Now you try: x + 3 = 10",
-                            guidance: "What number plus 3 equals 10? Think of it as: ? + 3 = 10"
-                        },
-                        psychologyNote: "**Conversational Learning**: The brain processes information better through dialogue. This mirrors how children naturally learn through questioning and discussion."
-                    }
-                },
-                {
-                    id: 'multiplication-equations',
-                    title: 'Stepping Up: Multiplication Equations',
-                    type: 'progressive-challenge',
-                    cognitiveLoad: 3,
-                    content: {
-                        bridge: "Now that you've mastered addition equations, let's look at multiplication. Same principles, just different operations!",
-                        example: {
-                            equation: "3x = 21",
-                            story: "You buy 3 identical items and spend $21 total. How much did each item cost?",
-                            thinking: "This means: 3 × (some number) = 21"
-                        },
-                        solution: {
-                            strategy: "To 'undo' multiplication, we divide",
-                            steps: [
-                                "Start with: 3x = 21",
-                                "Divide both sides by 3: 3x ÷ 3 = 21 ÷ 3",
-                                "Simplify: x = 7"
-                            ],
-                            check: "Let's verify: 3 × 7 = 21 ✓"
-                        },
-                        pattern: {
-                            title: "The Beautiful Pattern",
-                            insight: "Notice the pattern: Addition problems use subtraction to solve, multiplication problems use division. We always do the opposite operation!",
-                            visual: [
-                                "x + 5 = 12 → subtract 5 → x = 7",
-                                "x - 3 = 8 → add 3 → x = 11", 
-                                "3x = 15 → divide by 3 → x = 5",
-                                "x/4 = 2 → multiply by 4 → x = 8"
-                            ]
-                        },
-                        practice: {
-                            problem: "5x = 35",
-                            hint: "Think: 5 times what number equals 35?"
-                        },
-                        psychologyNote: "**Pattern Recognition & Chunking**: The brain loves patterns. By showing the 'opposite operation' pattern, we're helping create a mental framework that makes future problems easier."
-                    }
-                },
-                {
-                    id: 'confidence-builder',
-                    title: 'You\'re Already An Algebraist!',
-                    type: 'celebration',
-                    cognitiveLoad: 1,
-                    content: {
-                        achievement: "🎉 Congratulations! You just solved algebra equations using logical thinking and systematic steps.",
-                        reflection: [
-                            "You used <strong>pattern recognition</strong> to see how opposite operations work",
-                            "You applied <strong>logical reasoning</strong> to 'undo' what was done to the variable", 
-                            "You practiced <strong>verification</strong> by checking your answers",
-                            "You connected <strong>abstract symbols</strong> to real-world scenarios"
-                        ],
-                        nextSteps: {
-                            title: "Where This Takes You",
-                            applications: [
-                                "📱 <strong>Technology</strong>: Programming uses these exact logical patterns",
-                                "💰 <strong>Finance</strong>: Budgeting, loans, and investments all use algebra",
-                                "🏗️ <strong>Problem Solving</strong>: Breaking down complex problems into manageable steps",
-                                "🧠 <strong>Critical Thinking</strong>: Making logical decisions based on incomplete information"
-                            ]
-                        },
-                        motivation: "Every expert was once a beginner. You've just taken the first confident steps on a journey that will literally change how you think about problems. Your brain is already stronger than when you started! 💪",
-                        psychologyNote: "**Growth Mindset Reinforcement**: Celebrating process over product builds resilience and encourages continued learning. The brain releases dopamine when progress is acknowledged."
-                    }
-                }
-            ];
+        function renderSection() {
+            const section = sections[currentSection];
+            const contentEl = document.getElementById('lesson-content');
+            const titleEl = document.getElementById('section-title');
+            const typeEl = document.getElementById('section-type');
+            
+            titleEl.textContent = section.title;
+            typeEl.textContent = section.type;
+            typeEl.className = `section-type type-${section.type}`;
+            
+            // Update cognitive load
+            cognitiveLoad = section.cognitiveLoad;
+            updateCognitiveDisplay();
+            
+            // Render content based on type
+            switch(section.type) {
+                case 'conversation':
+                    renderConversation(section.content);
+                    break;
+                case 'explanation':
+                    renderExplanation(section.content);
+                    break;
+                case 'discovery':
+                    renderDiscovery(section.content);
+                    break;
+                case 'practice':
+                    renderPractice(section.content);
+                    break;
+                case 'challenge':
+                    renderChallenge(section.content);
+                    break;
+                case 'celebration':
+                    renderCelebration(section.content);
+                    break;
+            }
+            
+            // Update insights
+            document.getElementById('psychology-note').textContent = section.content.psychologyNote;
+            document.getElementById('utii-insight').textContent = section.content.utiiInsight;
+            
+            // Update navigation
+            updateNavigation();
+            generateSectionDots();
+            updateProgress();
+        }
 
-            const currentSectionData = sections[currentSection];
+        function renderConversation(content) {
+            const html = content.conversations.map((text, index) => `
+                <div class="conversation-bubble" style="animation-delay: ${index * 0.5}s">
+                    ${text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}
+                </div>
+            `).join('');
+            
+            document.getElementById('lesson-content').innerHTML = html;
+        }
 
-            const handleNext = () => {
-                setCompletedSections(prev => new Set([...prev, currentSection]));
-                if (currentSection < sections.length - 1) {
-                    setCurrentSection(prev => prev + 1);
-                    setShowInsight(false);
-                    setCognitiveLoad(sections[currentSection + 1].cognitiveLoad);
-                }
-            };
-
-            const handlePrevious = () => {
-                if (currentSection > 0) {
-                    setCurrentSection(prev => prev - 1);
-                    setShowInsight(false);
-                    setCognitiveLoad(sections[currentSection - 1].cognitiveLoad);
-                }
-            };
-
-            const checkPracticeAnswer = () => {
-                const isCorrect = practiceAnswer.trim() === "7";
-                setShowPracticeResult(true);
+        function renderExplanation(content) {
+            const html = `
+                <div class="conversation-bubble">
+                    ${content.mainText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}
+                </div>
                 
-                if (isCorrect) {
-                    setConfidenceLevel(prev => Math.min(5, prev + 1));
-                    setEngagement(prev => Math.min(10, prev + 1));
-                }
-            };
+                <div class="analogy-box">
+                    <h4>💡 Think About It This Way:</h4>
+                    <p>${content.analogy.setup}</p>
+                    ${content.analogy.examples.map(ex => `<p>${ex.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}</p>`).join('')}
+                </div>
+                
+                <div class="real-world-box">
+                    <h4>🌍 Real World Example:</h4>
+                    <p>${content.realWorld.scenario}</p>
+                    <div class="equation-display">${content.realWorld.equation}</div>
+                    <p>${content.realWorld.explanation}</p>
+                </div>
+            `;
+            
+            document.getElementById('lesson-content').innerHTML = html;
+        }
 
-            const renderConversation = (conversation) => (
-                React.createElement('div', { className: 'space-y-4' },
-                    conversation.map((message, index) =>
-                        React.createElement('div', {
-                            key: index,
-                            className: `p-4 rounded-lg ${
-                                message.emotion === 'warm' ? 'bg-orange-50 border-l-4 border-orange-400' :
-                                message.emotion === 'encouraging' ? 'bg-green-50 border-l-4 border-green-400' :
-                                'bg-blue-50 border-l-4 border-blue-400'
-                            }`
-                        },
-                            React.createElement('div', { className: 'flex items-start space-x-3' },
-                                React.createElement('div', { className: 'flex-shrink-0' },
-                                    React.createElement(MessageCircle, { className: 'h-5 w-5 text-blue-600' })
-                                ),
-                                React.createElement('div', {
-                                    className: 'text-gray-800 leading-relaxed',
-                                    dangerouslySetInnerHTML: { __html: message.text }
-                                })
-                            )
-                        )
-                    )
-                )
-            );
+        function renderDiscovery(content) {
+            const html = `
+                <div class="conversation-bubble">
+                    ${content.hook.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}
+                </div>
+                
+                <div class="analogy-box">
+                    <h4>🎲 Examples:</h4>
+                    ${content.examples.map(ex => `<p class="equation-display" style="font-size: 1em; margin: 10px 0;">${ex}</p>`).join('')}
+                </div>
+                
+                <div class="practice-area">
+                    <h4>🤔 Quick Check:</h4>
+                    <p>${content.interactive.question}</p>
+                    <button class="check-btn" onclick="showDiscoveryAnswer()">Show Answer</button>
+                    <div id="discovery-answer" style="display: none; margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.2); border-radius: 10px;">
+                        ${content.interactive.answer}
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('lesson-content').innerHTML = html;
+        }
 
-            const renderCognitiveLoadIndicator = () => (
-                React.createElement('div', { className: 'flex items-center space-x-2 text-sm text-gray-600' },
-                    React.createElement(Brain, { className: 'h-4 w-4' }),
-                    React.createElement('span', null, 'Cognitive Load:'),
-                    React.createElement('div', { className: 'flex space-x-1' },
-                        [1, 2, 3, 4, 5].map((level) =>
-                            React.createElement('div', {
-                                key: level,
-                                className: `w-2 h-4 rounded ${
-                                    level <= cognitiveLoad ? 'bg-blue-500' : 'bg-gray-200'
-                                }`
-                            })
-                        )
-                    )
-                )
-            );
+        function renderPractice(content) {
+            const html = `
+                <div class="conversation-bubble">
+                    <p>Let's solve this together, step by step:</p>
+                    <div class="equation-display">${content.equation}</div>
+                    <p>${content.story}</p>
+                </div>
+                
+                <div class="step-by-step">
+                    <h4>📚 The 'Undo' Strategy:</h4>
+                    ${content.steps.map((step, index) => `
+                        <div class="step">
+                            <div class="step-number">${index + 1}</div>
+                            <div>${step}</div>
+                        </div>
+                    `).join('')}
+                </div>
+                
+                <div class="practice-area">
+                    <h4>🎯 Your Turn to Practice:</h4>
+                    <div class="equation-display">${content.practice.problem}</div>
+                    <p>${content.practice.hint}</p>
+                    <input type="text" class="answer-input" id="practice-answer" placeholder="Your answer...">
+                    <button class="check-btn" onclick="checkPracticeAnswer('${content.practice.answer}')">Check Answer</button>
+                    <div id="practice-feedback"></div>
+                </div>
+            `;
+            
+            document.getElementById('lesson-content').innerHTML = html;
+        }
 
-            return React.createElement('div', { className: 'min-h-screen gradient-bg' },
-                // Header
-                React.createElement('header', { className: 'bg-white shadow-lg border-b-4 border-blue-500' },
-                    React.createElement('div', { className: 'max-w-4xl mx-auto px-4 sm:px-6 lg:px-8' },
-                        React.createElement('div', { className: 'flex justify-between items-center py-4' },
-                            React.createElement('div', { className: 'flex items-center' },
-                                React.createElement(Brain, { className: 'h-8 w-8 text-blue-600 mr-3' }),
-                                React.createElement('div', null,
-                                    React.createElement('h1', { className: 'text-2xl font-bold text-gray-900' }, 'Algebra Refresher'),
-                                    React.createElement('p', { className: 'text-sm text-gray-600' }, 'UTII-Enhanced Conversational Learning')
-                                )
-                            ),
-                            React.createElement('div', { className: 'flex items-center space-x-4' },
-                                renderCognitiveLoadIndicator(),
-                                React.createElement('div', { className: 'flex items-center space-x-2' },
-                                    React.createElement(Heart, { className: 'h-4 w-4 text-red-500' }),
-                                    React.createElement('span', { className: 'text-sm text-gray-600' }, `Confidence: ${confidenceLevel}/5`)
-                                )
-                            )
-                        )
-                    )
-                ),
+        function renderChallenge(content) {
+            const html = `
+                <div class="conversation-bubble">
+                    ${content.bridge}
+                </div>
+                
+                <div class="real-world-box">
+                    <h4>📖 Story Problem:</h4>
+                    <p>${content.story}</p>
+                    <div class="equation-display">${content.equation}</div>
+                </div>
+                
+                <div class="analogy-box">
+                    <h4>🎨 The Beautiful Pattern:</h4>
+                    <p>Notice the pattern: We always do the opposite operation!</p>
+                    <div class="pattern-grid">
+                        ${content.pattern.map(item => `<div class="pattern-item">${item}</div>`).join('')}
+                    </div>
+                </div>
+                
+                <div class="practice-area">
+                    <h4>🎯 Challenge Problem:</h4>
+                    <div class="equation-display">${content.practice.problem}</div>
+                    <p>${content.practice.hint}</p>
+                    <input type="text" class="answer-input" id="challenge-answer" placeholder="Your answer...">
+                    <button class="check-btn" onclick="checkPracticeAnswer('${content.practice.answer}')">Check Answer</button>
+                    <div id="practice-feedback"></div>
+                </div>
+            `;
+            
+            document.getElementById('lesson-content').innerHTML = html;
+        }
 
-                React.createElement('div', { className: 'max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8' },
-                    // Progress Bar
-                    React.createElement('div', { className: 'mb-8' },
-                        React.createElement('div', { className: 'flex justify-between items-center mb-2' },
-                            React.createElement('span', { className: 'text-sm font-medium text-gray-700' }, 'Progress'),
-                            React.createElement('span', { className: 'text-sm text-gray-500' }, `${currentSection + 1} of ${sections.length}`)
-                        ),
-                        React.createElement('div', { className: 'w-full bg-gray-200 rounded-full h-2' },
-                            React.createElement('div', {
-                                className: 'bg-blue-600 h-2 rounded-full transition-all duration-300 ease-out',
-                                style: { width: `${((currentSection + 1) / sections.length) * 100}%` }
-                            })
-                        )
-                    ),
+        function renderCelebration(content) {
+            const html = `
+                <div class="celebration">
+                    <div class="emoji">🎉</div>
+                    <h3>${content.achievement}</h3>
+                </div>
+                
+                <div class="achievements">
+                    <div class="achievement">
+                        <h4>🧠 What You Accomplished:</h4>
+                        ${content.accomplishments.map(item => `<p>${item.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}</p>`).join('')}
+                    </div>
+                    <div class="achievement">
+                        <h4>🚀 Where This Takes You:</h4>
+                        ${content.applications.map(item => `<p>${item.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}</p>`).join('')}
+                    </div>
+                </div>
+                
+                <div class="conversation-bubble">
+                    ${content.motivation.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}
+                </div>
+            `;
+            
+            document.getElementById('lesson-content').innerHTML = html;
+        }
 
-                    // Main Content
-                    React.createElement('div', { className: 'bg-white rounded-xl shadow-lg p-8 mb-6' },
-                        React.createElement('div', { className: 'flex items-center justify-between mb-6' },
-                            React.createElement('h2', { className: 'text-2xl font-bold text-gray-900' }, currentSectionData.title),
-                            React.createElement('div', { className: 'flex items-center space-x-2' },
-                                React.createElement('span', {
-                                    className: `px-3 py-1 rounded-full text-sm font-medium ${
-                                        currentSectionData.type === 'conversation' ? 'bg-orange-100 text-orange-800' :
-                                        currentSectionData.type === 'interactive-explanation' ? 'bg-blue-100 text-blue-800' :
-                                        currentSectionData.type === 'discovery' ? 'bg-purple-100 text-purple-800' :
-                                        currentSectionData.type === 'guided-practice' ? 'bg-green-100 text-green-800' :
-                                        currentSectionData.type === 'progressive-challenge' ? 'bg-yellow-100 text-yellow-800' :
-                                        'bg-pink-100 text-pink-800'
-                                    }`
-                                }, currentSectionData.type.replace('-', ' '))
-                            )
-                        ),
+        // Practice answer checking
+        function checkPracticeAnswer(correctAnswer) {
+            const input = document.getElementById('practice-answer') || document.getElementById('challenge-answer');
+            const feedback = document.getElementById('practice-feedback');
+            const userAnswer = input.value.trim();
+            
+            problemsSolved++;
+            
+            if (userAnswer === correctAnswer) {
+                correctAnswers++;
+                confidence = Math.min(5, confidence + 1);
+                engagement = Math.min(100, engagement + 5);
+                feedback.innerHTML = '<div class="feedback correct">🎉 Excellent! You got it right!</div>';
+            } else {
+                feedback.innerHTML = `<div class="feedback incorrect">Good try! The answer is ${correctAnswer}. Think about the steps we just learned.</div>`;
+            }
+            
+            updateAnalytics();
+        }
 
-                        // Content rendering - conversation type
-                        currentSectionData.type === 'conversation' && 
-                        React.createElement('div', { className: 'space-y-6' },
-                            renderConversation(currentSectionData.content.conversation)
-                        ),
+        function showDiscoveryAnswer() {
+            document.getElementById('discovery-answer').style.display = 'block';
+            engagement = Math.min(100, engagement + 3);
+            updateAnalytics();
+        }
 
-                        // Content rendering - interactive explanation type
-                        currentSectionData.type === 'interactive-explanation' && 
-                        React.createElement('div', { className: 'space-y-6' },
-                            React.createElement('div', {
-                                className: 'text-lg text-gray-800 leading-relaxed',
-                                dangerouslySetInnerHTML: { __html: currentSectionData.content.mainText }
-                            }),
-                            React.createElement('div', { className: 'bg-yellow-50 rounded-lg p-6 border-l-4 border-yellow-400' },
-                                React.createElement('h4', { className: 'font-semibold text-gray-900 mb-3' }, '💡 Think About It This Way:'),
-                                React.createElement('p', { className: 'text-gray-800 mb-4' }, currentSectionData.content.analogy.setup),
-                                React.createElement('div', { className: 'space-y-2' },
-                                    currentSectionData.content.analogy.breakdown.map((item, index) =>
-                                        React.createElement('div', {
-                                            key: index,
-                                            className: 'text-gray-700',
-                                            dangerouslySetInnerHTML: { __html: item }
-                                        })
-                                    )
-                                )
-                            ),
-                            React.createElement('div', { className: 'bg-green-50 rounded-lg p-6 border-l-4 border-green-400' },
-                                React.createElement('h4', { className: 'font-semibold text-gray-900 mb-3' }, '🌍 Real World Example:'),
-                                React.createElement('p', { className: 'text-gray-800 mb-3' }, currentSectionData.content.realWorldConnection.scenario),
-                                React.createElement('div', { className: 'bg-white p-3 rounded border font-mono text-center text-lg' },
-                                    currentSectionData.content.realWorldConnection.algebraicForm
-                                ),
-                                React.createElement('p', { className: 'text-gray-700 mt-3' }, currentSectionData.content.realWorldConnection.explanation)
-                            )
-                        ),
+        // Navigation functions
+        function nextSection() {
+            if (currentSection < sections.length - 1) {
+                completedSections.add(currentSection);
+                currentSection++;
+                renderSection();
+            }
+        }
 
-                        // Content rendering - discovery type
-                        currentSectionData.type === 'discovery' && 
-                        React.createElement('div', { className: 'space-y-6' },
-                            React.createElement('div', {
-                                className: 'text-lg text-gray-800 leading-relaxed font-medium text-center p-4 bg-purple-50 rounded-lg',
-                                dangerouslySetInnerHTML: { __html: currentSectionData.content.hook }
-                            }),
-                            
-                            currentSectionData.content.exploration.map((item, index) =>
-                                React.createElement('div', { key: index, className: 'bg-gray-50 rounded-lg p-6' },
-                                    React.createElement('h4', { className: 'font-semibold text-gray-900 mb-3' }, item.title),
-                                    React.createElement('p', { className: 'text-gray-800 mb-4' }, item.description),
-                                    item.examples && React.createElement('div', { className: 'space-y-2' },
-                                        item.examples.map((example, i) =>
-                                            React.createElement('div', { key: i, className: 'bg-white p-3 rounded border font-mono text-blue-800' }, example)
-                                        )
-                                    ),
-                                    item.comparison && React.createElement('div', { className: 'grid grid-cols-1 md:grid-cols-2 gap-4 mt-4' },
-                                        React.createElement('div', { className: 'bg-red-50 p-3 rounded' }, 'Long way: ', item.comparison.longWay),
-                                        React.createElement('div', { className: 'bg-green-50 p-3 rounded' }, 'Short way: ', React.createElement('span', { className: 'font-mono' }, item.comparison.shortWay))
-                                    )
-                                )
-                            ),
+        function previousSection() {
+            if (currentSection > 0) {
+                currentSection--;
+                renderSection();
+            }
+        }
 
-                            currentSectionData.content.interactiveElement && React.createElement('div', { className: 'bg-blue-50 rounded-lg p-6 border-l-4 border-blue-400' },
-                                React.createElement('h4', { className: 'font-semibold text-gray-900 mb-3' }, '🤔 Quick Check:'),
-                                React.createElement('p', { className: 'text-gray-800 mb-4' }, currentSectionData.content.interactiveElement.prompt),
-                                React.createElement('details', { className: 'bg-white p-3 rounded' },
-                                    React.createElement('summary', { className: 'cursor-pointer font-medium text-blue-700' }, 'Show Answer'),
-                                    React.createElement('p', { className: 'mt-2 text-gray-800' }, currentSectionData.content.interactiveElement.answer)
-                                )
-                            )
-                        ),
+        function goToSection(index) {
+            if (index !== currentSection) {
+                completedSections.add(currentSection);
+                currentSection = index;
+                renderSection();
+            }
+        }
 
-                        // Content rendering - guided practice type
-                        currentSectionData.type === 'guided-practice' && 
-                        React.createElement('div', { className: 'space-y-6' },
-                            React.createElement('div', { className: 'text-center' },
-                                React.createElement('div', { className: 'text-3xl font-mono bg-gray-100 p-4 rounded-lg inline-block' },
-                                    currentSectionData.content.setup.equation
-                                ),
-                                React.createElement('p', { className: 'text-gray-600 mt-2' }, currentSectionData.content.setup.text)
-                            ),
+        function updateNavigation() {
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            
+            prevBtn.disabled = currentSection === 0;
+            nextBtn.disabled = currentSection === sections.length - 1;
+            
+            if (currentSection === sections.length - 1) {
+                nextBtn.textContent = 'Complete ✓';
+            } else {
+                nextBtn.textContent = 'Next →';
+            }
+        }
 
-                            currentSectionData.content.conversation.map((exchange, index) =>
-                                React.createElement('div', { key: index, className: 'bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-6' },
-                                    React.createElement('div', { className: 'space-y-4' },
-                                        React.createElement('div', { className: 'flex items-start space-x-3' },
-                                            React.createElement('div', { className: 'flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-bold' }, 'T'),
-                                            React.createElement('div', { className: 'text-gray-800' }, exchange.tutor)
-                                        ),
-                                        React.createElement('div', { className: 'flex items-start space-x-3 ml-8' },
-                                            React.createElement('div', { className: 'flex-shrink-0 w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center text-sm font-bold' }, 'S'),
-                                            React.createElement('div', { className: 'text-gray-700 italic' }, exchange.student)
-                                        )
-                                    )
-                                )
-                            ),
+        // Analytics functions
+        function updateAnalytics() {
+            document.getElementById('confidence-display').textContent = `${confidence}/5`;
+            document.getElementById('section-counter').textContent = `${currentSection + 1}/${sections.length}`;
+            document.getElementById('problems-solved').textContent = problemsSolved;
+            
+            if (problemsSolved > 0) {
+                const accuracy = Math.round((correctAnswers / problemsSolved) * 100);
+                document.getElementById('accuracy-rate').textContent = `${accuracy}%`;
+            }
+            
+            document.getElementById('engagement-display').textContent = `${engagement}%`;
+            updateCognitiveDisplay();
+            updateProgress();
+        }
 
-                            React.createElement('div', { className: 'bg-yellow-50 rounded-lg p-6 border-l-4 border-yellow-400' },
-                                React.createElement('h4', { className: 'font-semibold text-gray-900 mb-3' }, '📚 The Method: ', currentSectionData.content.method.title),
-                                React.createElement('p', { className: 'text-gray-800 mb-4' }, currentSectionData.content.method.explanation),
-                                React.createElement('div', { className: 'space-y-2' },
-                                    currentSectionData.content.method.steps.map((step, index) =>
-                                        React.createElement('div', { key: index, className: 'flex items-center space-x-3' },
-                                            React.createElement('span', { className: 'flex-shrink-0 w-6 h-6 bg-yellow-500 text-white rounded-full flex items-center justify-center text-sm font-bold' }, index + 1),
-                                            React.createElement('span', { className: 'font-mono text-gray-800' }, step)
-                                        )
-                                    )
-                                ),
-                                React.createElement('div', { className: 'mt-4 p-3 bg-blue-100 rounded' },
-                                    React.createElement('strong', null, 'Key Insight: '), currentSectionData.content.method.insight
-                                )
-                            ),
+        function updateCognitiveDisplay() {
+            const display = document.getElementById('cognitive-display');
+            const filled = '●'.repeat(cognitiveLoad);
+            const empty = '○'.repeat(5 - cognitiveLoad);
+            display.textContent = filled + empty;
+        }
 
-                            React.createElement('div', { className: 'bg-green-50 rounded-lg p-6' },
-                                React.createElement('h4', { className: 'font-semibold text-gray-900 mb-3' }, '🎯 Your Turn to Practice:'),
-                                React.createElement('div', { className: 'text-center mb-4' },
-                                    React.createElement('div', { className: 'text-2xl font-mono bg-white p-3 rounded border inline-block' },
-                                        currentSectionData.content.practice.problem
-                                    )
-                                ),
-                                React.createElement('p', { className: 'text-gray-700 mb-4' }, currentSectionData.content.practice.guidance),
-                                React.createElement('div', { className: 'flex items-center space-x-4' },
-                                    React.createElement('input', {
-                                        type: 'text',
-                                        value: practiceAnswer,
-                                        onChange: (e) => setPracticeAnswer(e.target.value),
-                                        placeholder: 'Your answer...',
-                                        className: 'flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
-                                    }),
-                                    React.createElement('button', {
-                                        onClick: checkPracticeAnswer,
-                                        className: 'px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors'
-                                    }, 'Check')
-                                ),
-                                showPracticeResult &&
-                                React.createElement('div', {
-                                    className: `mt-4 p-3 rounded-lg ${
-                                        practiceAnswer.trim() === "7" ? 'bg-green-100 text-green-800' : 'bg-orange-100 text-orange-800'
-                                    }`
-                                },
-                                    practiceAnswer.trim() === "7" ? 
-                                        "🎉 Excellent! You've got it!" : 
-                                        "Good try! The answer is 7. Remember: what number plus 3 equals 10?"
-                                )
-                            )
-                        ),
+        function updateProgress() {
+            const progress = ((currentSection + 1) / sections.length) * 100;
+            const circle = document.getElementById('progress-circle');
+            const circumference = 157; // 2 * π * 25
+            const offset = circumference - (progress / 100) * circumference;
+            circle.style.strokeDashoffset = offset;
+        }
 
-                        // Content rendering - progressive challenge type
-                        currentSectionData.type === 'progressive-challenge' && 
-                        React.createElement('div', { className: 'space-y-6' },
-                            React.createElement('div', { className: 'text-lg text-gray-800 bg-blue-50 p-4 rounded-lg' },
-                                currentSectionData.content.bridge
-                            ),
+        function startTimer() {
+            setInterval(() => {
+                const elapsed = Math.floor((Date.now() - startTime) / 1000);
+                const minutes = Math.floor(elapsed / 60);
+                const seconds = elapsed % 60;
+                document.getElementById('time-display').textContent = 
+                    `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
 
-                            React.createElement('div', { className: 'bg-green-50 rounded-lg p-6' },
-                                React.createElement('h4', { className: 'font-semibold text-gray-900 mb-3' }, '📖 Story Problem:'),
-                                React.createElement('p', { className: 'text-gray-800 mb-3' }, currentSectionData.content.example.story),
-                                React.createElement('div', { className: 'text-center' },
-                                    React.createElement('div', { className: 'text-2xl font-mono bg-white p-3 rounded border inline-block' },
-                                        currentSectionData.content.example.equation
-                                    )
-                                ),
-                                React.createElement('p', { className: 'text-gray-700 mt-3 text-center italic' }, currentSectionData.content.example.thinking)
-                            ),
+        function toggleInsights() {
+            const panel = document.getElementById('insights-panel');
+            const button = document.querySelector('.insights-toggle');
+            
+            showInsights = !showInsights;
+            
+            if (showInsights) {
+                panel.classList.add('show');
+                button.textContent = '💡 Hide Learning Insights';
+            } else {
+                panel.classList.remove('show');
+                button.textContent = '💡 Show Learning Insights';
+            }
+        }
 
-                            React.createElement('div', { className: 'bg-yellow-50 rounded-lg p-6' },
-                                React.createElement('h4', { className: 'font-semibold text-gray-900 mb-3' }, '🔧 Solution Strategy:'),
-                                React.createElement('p', { className: 'text-gray-800 mb-4' }, currentSectionData.content.solution.strategy),
-                                React.createElement('div', { className: 'space-y-2' },
-                                    currentSectionData.content.solution.steps.map((step, index) =>
-                                        React.createElement('div', { key: index, className: 'flex items-center space-x-3' },
-                                            React.createElement('span', { className: 'flex-shrink-0 w-6 h-6 bg-yellow-500 text-white rounded-full flex items-center justify-center text-sm font-bold' }, index + 1),
-                                            React.createElement('span', { className: 'font-mono text-gray-800' }, step)
-                                        )
-                                    )
-                                ),
-                                React.createElement('div', { className: 'mt-4 p-3 bg-green-100 rounded' },
-                                    React.createElement('strong', null, '✓ Check: '), currentSectionData.content.solution.check
-                                )
-                            ),
-
-                            React.createElement('div', { className: 'bg-purple-50 rounded-lg p-6 border-l-4 border-purple-400' },
-                                React.createElement('h4', { className: 'font-semibold text-gray-900 mb-3' }, '🎨 ', currentSectionData.content.pattern.title),
-                                React.createElement('p', { className: 'text-gray-800 mb-4' }, currentSectionData.content.pattern.insight),
-                                React.createElement('div', { className: 'grid grid-cols-1 md:grid-cols-2 gap-3' },
-                                    currentSectionData.content.pattern.visual.map((item, index) =>
-                                        React.createElement('div', { key: index, className: 'bg-white p-3 rounded font-mono text-sm text-center' }, item)
-                                    )
-                                )
-                            )
-                        ),
-
-                        // Content rendering - celebration type
-                        currentSectionData.type === 'celebration' && 
-                        React.createElement('div', { className: 'space-y-6 text-center' },
-                            React.createElement('div', { className: 'text-4xl mb-4' }, currentSectionData.content.achievement),
-                            
-                            React.createElement('div', { className: 'bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-6' },
-                                React.createElement('h4', { className: 'font-semibold text-gray-900 mb-4' }, '🧠 What You Just Accomplished:'),
-                                React.createElement('div', { className: 'grid grid-cols-1 md:grid-cols-2 gap-4' },
-                                    currentSectionData.content.reflection.map((item, index) =>
-                                        React.createElement('div', {
-                                            key: index,
-                                            className: 'bg-white p-4 rounded-lg shadow-sm',
-                                            dangerouslySetInnerHTML: { __html: item.replace(/\*\*(.*?)\*\*/g, '<strong class="text-purple-700">$1</strong>') }
-                                        })
-                                    )
-                                )
-                            ),
-
-                            React.createElement('div', { className: 'bg-blue-50 rounded-lg p-6' },
-                                React.createElement('h4', { className: 'font-semibold text-gray-900 mb-4' }, currentSectionData.content.nextSteps.title),
-                                React.createElement('div', { className: 'grid grid-cols-1 md:grid-cols-2 gap-4' },
-                                    currentSectionData.content.nextSteps.applications.map((item, index) =>
-                                        React.createElement('div', {
-                                            key: index,
-                                            className: 'bg-white p-4 rounded-lg shadow-sm text-left',
-                                            dangerouslySetInnerHTML: { __html: item.replace(/\*\*(.*?)\*\*/g, '<strong class="text-blue-700">$1</strong>') }
-                                        })
-                                    )
-                                )
-                            ),
-
-                            React.createElement('div', { className: 'bg-green-50 rounded-lg p-6' },
-                                React.createElement('p', {
-                                    className: 'text-lg text-gray-800 leading-relaxed',
-                                    dangerouslySetInnerHTML: { __html: currentSectionData.content.motivation.replace(/\*\*(.*?)\*\*/g, '<strong class="text-green-700">$1</strong>') }
-                                })
-                            )
-                        ),
-
-                        // Psychology and UTII Insights
-                        showInsight && currentSectionData.content.psychologyNote &&
-                        React.createElement('div', { className: 'mt-6 space-y-4' },
-                            React.createElement('div', { className: 'bg-indigo-50 rounded-lg p-6 border-l-4 border-indigo-400' },
-                                React.createElement('h4', { className: 'flex items-center font-semibold text-gray-900 mb-3' },
-                                    React.createElement(Brain, { className: 'h-5 w-5 mr-2 text-indigo-600' }),
-                                    'Learning Psychology Insight'
-                                ),
-                                React.createElement('p', { className: 'text-gray-800' }, currentSectionData.content.psychologyNote)
-                            ),
-                            currentSectionData.content.utiiInsight &&
-                            React.createElement('div', { className: 'bg-purple-50 rounded-lg p-6 border-l-4 border-purple-400' },
-                                React.createElement('h4', { className: 'flex items-center font-semibold text-gray-900 mb-3' },
-                                    React.createElement(Target, { className: 'h-5 w-5 mr-2 text-purple-600' }),
-                                    'UTII Framework Application'
-                                ),
-                                React.createElement('p', { className: 'text-gray-800' }, currentSectionData.content.utiiInsight)
-                            )
-                        ),
-
-                        React.createElement('div', { className: 'mt-6 flex justify-center' },
-                            React.createElement('button', {
-                                onClick: () => setShowInsight(!showInsight),
-                                className: 'flex items-center px-4 py-2 text-sm text-indigo-600 hover:text-indigo-800 transition-colors'
-                            },
-                                React.createElement(Lightbulb, { className: 'h-4 w-4 mr-1' }),
-                                showInsight ? 'Hide' : 'Show', ' Learning Insights'
-                            )
-                        )
-                    ),
-
-                    // Navigation
-                    React.createElement('div', { className: 'flex justify-between items-center' },
-                        React.createElement('button', {
-                            onClick: handlePrevious,
-                            disabled: currentSection === 0,
-                            className: 'flex items-center px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors'
-                        },
-                            React.createElement(ChevronLeft, { className: 'h-4 w-4 mr-2' }),
-                            'Previous'
-                        ),
-
-                        React.createElement('div', { className: 'flex items-center space-x-2' },
-                            sections.map((_, index) =>
-                                React.createElement('div', {
-                                    key: index,
-                                    className: `w-3 h-3 rounded-full ${
-                                        index === currentSection ? 'bg-blue-600' :
-                                        completedSections.has(index) ? 'bg-green-500' :
-                                        'bg-gray-300'
-                                    }`
-                                })
-                            )
-                        ),
-
-                        React.createElement('button', {
-                            onClick: handleNext,
-                            disabled: currentSection === sections.length - 1,
-                            className: 'flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-semibold'
-                        },
-                            currentSection === sections.length - 1 ? 'Complete' : 'Next',
-                            currentSection !== sections.length - 1 && React.createElement(ChevronRight, { className: 'h-4 w-4 ml-1' })
-                        )
-                    ),
-
-                    // Progress Analytics
-                    React.createElement('div', { className: 'mt-8 bg-white rounded-xl shadow-lg p-6' },
-                        React.createElement('h3', { className: 'text-lg font-semibold text-gray-900 mb-4' }, 'Your Learning Journey'),
-                        React.createElement('div', { className: 'grid grid-cols-1 md:grid-cols-3 gap-4' },
-                            React.createElement('div', { className: 'text-center' },
-                                React.createElement('div', { className: 'text-2xl font-bold text-blue-600' }, 
-                                    Math.round((currentSection + 1) / sections.length * 100) + '%'
-                                ),
-                                React.createElement('div', { className: 'text-sm text-gray-600' }, 'Progress')
-                            ),
-                            React.createElement('div', { className: 'text-center' },
-                                React.createElement('div', { className: 'text-2xl font-bold text-green-600' }, `${confidenceLevel}/5`),
-                                React.createElement('div', { className: 'text-sm text-gray-600' }, 'Confidence Level')
-                            ),
-                            React.createElement('div', { className: 'text-center' },
-                                React.createElement('div', { className: 'text-2xl font-bold text-purple-600' }, `${engagement}/10`),
-                                React.createElement('div', { className: 'text-sm text-gray-600' }, 'Engagement')
-                            )
-                        )
-                    )
-                )
-            );
-        };
-
-        ReactDOM.render(React.createElement(AlgebraRefresherLesson), document.getElementById('root'));
+        // Initialize when page loads
+        window.onload = init;
     </script>
 </body>
 </html>
